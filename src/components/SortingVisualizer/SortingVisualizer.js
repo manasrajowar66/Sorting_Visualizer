@@ -1,8 +1,14 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
-import { Button, Grid, Slider, Typography,useMediaQuery } from "@material-ui/core";
+import {
+  Button,
+  Grid,
+  Slider,
+  Typography,
+  useMediaQuery,
+} from "@material-ui/core";
 import { getMergeSortAnimation } from "../SortingAlgorithms/getMergeSortAnimation";
-import {getBubbleSortAnimation} from '../SortingAlgorithms/getBubbleSortAnimation';
+import { getBubbleSortAnimation } from "../SortingAlgorithms/getBubbleSortAnimation";
 import { makeStyles, withStyles } from "@material-ui/styles";
 import { TweenMax, Power3 } from "gsap";
 
@@ -10,8 +16,8 @@ const useStyles = makeStyles((theme) => ({
   container: {
     backgroundColor: "#282c34",
     width: "100vw",
-    height: "100%",
-    overflowX:'hidden'
+    height: "100vh",
+    overflowX: "hidden",
   },
   button: {
     backgroundImage: "linear-gradient(to right, #fa709a 0%, #fee140 100%)",
@@ -20,12 +26,11 @@ const useStyles = makeStyles((theme) => ({
     color: "#111",
     fontWeight: 500,
     letterSpacing: 1,
-    [theme.breakpoints.down("xs")]:{
-      marginBottom:'1em'
-    }
+    [theme.breakpoints.down("xs")]: {
+      marginBottom: "1em",
+    },
   },
 }));
-
 
 const PrettoSlider = withStyles({
   root: {
@@ -60,19 +65,17 @@ const PrettoSlider = withStyles({
 const SortingVisualizer = () => {
   const classes = useStyles();
   const [state, setState] = useState({ array: [] });
-  const [arraySize,setArraySize] = useState(10);
+  const [arraySize, setArraySize] = useState(10);
   const [speed, setSpeed] = useState(90);
-  const [disable,setDisable] = useState({
-    button:false,
-    heightTransition:true
-  })
+  const [disable, setDisable] = useState({
+    button: false,
+    heightTransition: true,
+  });
   // const theme = useTheme();
   // const matchMd = useMediaQuery("(max-width:1200px)");
   const matchSm = useMediaQuery("(max-width:900px)");
   const matchXs = useMediaQuery("(max-width:600px)");
   // const matchLg = useMediaQuery("(min-width:1201px)");
-
- 
 
   useEffect(() => {
     resetArray();
@@ -81,7 +84,7 @@ const SortingVisualizer = () => {
   const resetArray = () => {
     const array = [];
 
-    for (let i = 0; i <= (arraySize*3); i++) {
+    for (let i = 0; i <= arraySize * 3; i++) {
       array.push(randomIntFromInterval(5, 500));
     }
     console.log(array);
@@ -91,13 +94,12 @@ const SortingVisualizer = () => {
   // useEffect(() => {
   //   resetArray();
   // }, []);
-  
 
   const PRIMARY_COLOR = "turquoise";
   const SECONDARY_COLOR = "red";
 
   const mergerSort = () => {
-    setDisable({button:true,heightTransition:true});
+    setDisable({ button: true, heightTransition: true });
     const animations = getMergeSortAnimation(state.array);
     for (let i = 0; i < animations.length; i++) {
       const arrayBars = document.getElementsByClassName("array-bar");
@@ -136,19 +138,18 @@ const SortingVisualizer = () => {
         //   barOneStyle.height = `${newHeight}px`;
         // }, i * 10);
       }
-      if(i === animations.length-1){
+      if (i === animations.length - 1) {
         setTimeout(() => {
-          setDisable({button:false,heightTransition:true});
-        },i*(100-speed));
+          setDisable({ button: false, heightTransition: true });
+        }, i * (100 - speed));
       }
     }
-    
   };
 
-  const bubbleSort = ()=>{
-    setDisable({button:true,heightTransition:false});
+  const bubbleSort = () => {
+    setDisable({ button: true, heightTransition: false });
     const animations = getBubbleSortAnimation(state.array);
-    for(let a=0;a<animations.length;a++){
+    for (let a = 0; a < animations.length; a++) {
       const arrayBars = document.getElementsByClassName("array-bar");
       const isColorChange = a % 3 !== 2;
       if (isColorChange) {
@@ -160,21 +161,21 @@ const SortingVisualizer = () => {
           barOneStyle.backgroundColor = color;
           barTwoStyle.backgroundColor = color;
         }, a * (100 - speed));
-      }else {
+      } else {
         // console.log(animations[a][0].i.ind,animations[a][0].j.ind);
-        if(animations[a][0].swaped){
+        if (animations[a][0].swaped) {
           const barOneStyle = arrayBars[animations[a][0].i.ind].style;
           const barTwoStyle = arrayBars[animations[a][0].j.ind].style;
           setTimeout(() => {
-           barOneStyle.height = `${animations[a][0].i.val}px`;
-           barTwoStyle.height = `${animations[a][0].j.val}px`;
-          }, a * (100-speed));
+            barOneStyle.height = `${animations[a][0].i.val}px`;
+            barTwoStyle.height = `${animations[a][0].j.val}px`;
+          }, a * (100 - speed));
         }
       }
-      if(a === animations.length-1){
+      if (a === animations.length - 1) {
         setTimeout(() => {
-          setDisable({button:false,heightTransition:true});
-        },a*(100-speed));
+          setDisable({ button: false, heightTransition: true });
+        }, a * (100 - speed));
       }
     }
   };
@@ -187,8 +188,15 @@ const SortingVisualizer = () => {
         direction="column"
         justify="center"
       >
-        <Grid item container justify={matchSm?undefined:"center"} alignItems={matchSm?"center" : undefined} style={{margin:'2em 0 3em 0'}} direction={matchSm?"column":"row"} >
-          <Grid item style={{marginRight:matchSm?0:'3em'}}>
+        <Grid
+          item
+          container
+          justify={matchSm ? undefined : "center"}
+          alignItems={matchSm ? "center" : undefined}
+          style={{ margin: "2em 0 3em 0" }}
+          direction={matchSm ? "column" : "row"}
+        >
+          <Grid item style={{ marginRight: matchSm ? 0 : "3em" }}>
             <Typography variant="body1" style={{ color: PRIMARY_COLOR }}>
               Animation Speed
             </Typography>
@@ -230,69 +238,82 @@ const SortingVisualizer = () => {
                   style={{
                     backgroundColor: PRIMARY_COLOR,
                     height: `${val}px`,
-                    width: arraySize >= 0 && arraySize <=40?"8px":arraySize >= 41 && arraySize <=70?"4.5px":"2.7px",
+                    width:
+                      arraySize >= 0 && arraySize <= 40
+                        ? "8px"
+                        : arraySize >= 41 && arraySize <= 70
+                        ? "4.5px"
+                        : "2.7px",
                     margin: "0 1px",
-                    transition: disable.heightTransition ? "height 0.1s ease":undefined,
+                    transition: disable.heightTransition
+                      ? "height 0.1s ease"
+                      : undefined,
                   }}
                   className="array-bar"
                 ></Grid>
               );
             })}
         </Grid>
-        <Grid item container justify={matchXs?undefined:"center"} alignItems={matchXs?"center" : undefined} style={{margin:'2em 0 3em 0'}} direction={matchXs?"column":"row"}>
-        {!disable.button 
-        ? <> 
-        <Grid item>
-            <Button
-              className={classes.button}
-              variant="contained"
-              onClick={resetArray}
-              disabled={disable.button}
-            >
-              Reset the Array
-            </Button>
-          </Grid>
-          <Grid item>
-            <Button
-              className={classes.button}
-              variant="contained"
-              onClick={mergerSort}
-              disabled={disable.button}
-            >
-              Merge Sort
-            </Button>
-          </Grid>
-          <Grid item>
-            <Button
-              disabled={disable.button}
-              className={classes.button}
-              variant="contained"
-              onClick={bubbleSort}
-            >
-              Bubble Sort
-            </Button>
-          </Grid>
-           </>
-         :
-        ( 
-          <Grid item>
-            <Button
-              disabled={!disable.button}
-              className={classes.button}
-              variant="contained"
-              onClick={()=>{window.location.reload();}}
-            >
-              Stop
-            </Button>
-          </Grid>)
-         }
-         
-          
+        <Grid
+          item
+          container
+          justify={matchXs ? undefined : "center"}
+          alignItems={matchXs ? "center" : undefined}
+          style={{ margin: "2em 0 3em 0" }}
+          direction={matchXs ? "column" : "row"}
+        >
+          {!disable.button ? (
+            <>
+              <Grid item>
+                <Button
+                  className={classes.button}
+                  variant="contained"
+                  onClick={resetArray}
+                  disabled={disable.button}
+                >
+                  Reset the Array
+                </Button>
+              </Grid>
+              <Grid item>
+                <Button
+                  className={classes.button}
+                  variant="contained"
+                  onClick={mergerSort}
+                  disabled={disable.button}
+                >
+                  Merge Sort
+                </Button>
+              </Grid>
+              <Grid item>
+                <Button
+                  disabled={disable.button}
+                  className={classes.button}
+                  variant="contained"
+                  onClick={bubbleSort}
+                >
+                  Bubble Sort
+                </Button>
+              </Grid>
+            </>
+          ) : (
+            <Grid item>
+              <Button
+                disabled={!disable.button}
+                className={classes.button}
+                variant="contained"
+                onClick={() => {
+                  window.location.reload();
+                }}
+              >
+                Stop
+              </Button>
+            </Grid>
+          )}
         </Grid>
       </Grid>
     </>
   );
-};;;
+};
 
 const convertToMilisec = (sec) => {
   return sec / 1000;
